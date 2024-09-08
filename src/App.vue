@@ -1,5 +1,5 @@
 <template>
-  <TheHeader />
+  <TheHeader @go-to-timeline="goTo(PAGE_TIMELINE)" @go-to-progress="goTo(PAGE_PROGRESS)" />
 
   <main class="flex flex-grow flex-col">
     <TheTimeline v-show="currentPage === PAGE_TIMELINE" />
@@ -7,31 +7,33 @@
     <TheProgress v-show="currentPage === PAGE_PROGRESS" />
   </main>
 
-  <TheNav :current-page="currentPage" @navigate="currentPage = $event" />
+  <TheNav :current-page="currentPage" @navigate="goTo($event)" />
 </template>
 
 <script setup>
-import TheActivities from './pages/TheActivities.vue'
-import TheTimeline from './pages/TheTimeline.vue'
-import TheProgress from './pages/TheProgress.vue'
-
+import { ref } from 'vue'
+import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from './constants'
 import TheHeader from './components/TheHeader.vue'
 import TheNav from './components/TheNav.vue'
-
-import { ref } from 'vue'
-import { PAGE_ACTIVITIES, PAGE_PROGRESS, PAGE_TIMELINE } from './constants'
+import TheTimeline from './pages/TheTimeline.vue'
+import TheActivities from './pages/TheActivities.vue'
+import TheProgress from './pages/TheProgress.vue'
 
 const currentPage = ref(normalizePageHash())
 
 function normalizePageHash() {
   const hash = window.location.hash.slice(1)
 
-  if ([PAGE_ACTIVITIES, PAGE_PROGRESS, PAGE_TIMELINE].includes(hash)) {
+  if ([PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS].includes(hash)) {
     return hash
   }
 
   window.location.hash = PAGE_TIMELINE
 
   return PAGE_TIMELINE
+}
+
+function goTo(page) {
+  currentPage.value = page
 }
 </script>
