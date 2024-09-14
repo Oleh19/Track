@@ -7,10 +7,15 @@
 </template>
 
 <script setup>
+import { isTimelineItemValid } from '@/validators'
 import BaseSelect from './BaseSelect.vue'
 
 const props = defineProps({
-  timelineItem: { type: Object, required: true }
+  timelineItem: {
+    type: Object,
+    required: true,
+    valiator: isTimelineItemValid
+  }
 })
 const options = [
   { value: 1, label: 'Coding' },
